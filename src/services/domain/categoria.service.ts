@@ -10,7 +10,6 @@ export class CategoriaService {
     constructor(public http: HttpClient) {}
 
     findAll() : Observable<CategoriaDTO[]> {
-        console.log(API_CONFIG.baseUrl);
-        return this.http.get<CategoriaDTO[]>(`${API_CONFIG.baseUrl}/categorias`);
+        return this.http.get<CategoriaDTO[]>(`${API_CONFIG.baseUrl}categorias`);
     }
 }
