@@ -6,27 +6,32 @@ import { API_CONFIG } from "../../config/api.config";
 
 @IonicPage()
 @Component({
-  selector: 'page-categorias',
-  templateUrl: 'categorias.html',
+	selector: 'page-categorias',
+	templateUrl: 'categorias.html',
 })
 
 export class CategoriasPage {
-  
-  bucketUrl: string = API_CONFIG.bucketBaseUrl;
-  itens : CategoriaDTO[];
+	categoria: CategoriaDTO = {
+		id: "",
+		nome: "",
+		bucketUrl: ""
+	};
 
-  constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
-    public categoriaService: CategoriaService
-  ) {}
+	itens: CategoriaDTO[];
 
-  ionViewDidLoad() {
-    this.categoriaService.findAll().subscribe(
-      response => {
-        this.itens = response
-      },
-      error => {}
-    );
-  }
+	constructor(
+		public navCtrl: NavController,
+		public navParams: NavParams,
+		public categoriaService: CategoriaService
+	) { }
+
+	ionViewDidLoad() {
+		this.categoriaService.findAll().subscribe(
+			response => {
+				this.categoria.bucketUrl = API_CONFIG.bucketBaseUrl;
+				this.itens = response;
+			},
+			error => { }
+		);
+	}
 }
