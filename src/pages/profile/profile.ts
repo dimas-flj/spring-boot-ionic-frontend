@@ -38,8 +38,20 @@ export class ProfilePage {
 						this.cliente.imageUrl = "assets/imgs/avatar-blank.png";
 					}
 				},
-				error => { }
+				error => {
+					switch (error.status) {
+						case API_CONFIG.HTTP_STATUS_403: {
+							this.navCtrl.setRoot("HomePage");
+							break;
+						}
+						default: { break; }
+					}
+				}
 			);
+		}
+		else {
+			this.storage.setLocalUser(null);
+			this.navCtrl.setRoot("HomePage");
 		}
 	}
 
