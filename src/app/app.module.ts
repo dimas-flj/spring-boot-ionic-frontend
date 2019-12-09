@@ -16,28 +16,28 @@ import { ClienteService } from '../services/domain/cliente.service';
 import { AuthInterceptorProvider } from '../interceptors/auth-interceptor';
 
 @NgModule({
-  declarations: [
-    MyApp
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    IonicModule.forRoot(MyApp),
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: ErrorHandler, useClass: IonicErrorHandler },
-    CategoriaService,
-    AuthInterceptorProvider,
-    ErrorInterceptorProvider,
-    AuthService,
-    StorageService,
-    ClienteService
-  ]
+	declarations: [
+		MyApp
+	],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		IonicModule.forRoot(MyApp),
+	],
+	bootstrap: [IonicApp],
+	entryComponents: [
+		MyApp
+	],
+	providers: [
+		StatusBar,
+		SplashScreen,
+		{ provide: ErrorHandler, useClass: IonicErrorHandler },
+		AuthInterceptorProvider,
+		ErrorInterceptorProvider,
+		AuthService,
+		CategoriaService,
+		StorageService,
+		ClienteService
+	]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { CredenciaisDTO } from "../models/credenciais.dto";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpRequest } from "@angular/common/http";
 import { API_CONFIG } from "../config/api.config";
 import { LocalUser } from "../models/local_user";
 import { StorageService } from "./storage.service";
@@ -23,7 +23,8 @@ export class AuthService {
 		);
 	}
 
-	refreshToken() {
+	refreshToken(baseUrl: string) {
+		//console.log("baseUrl : " + baseUrl);
 		return this.http.post(
 			`${API_CONFIG.baseUrl}/auth/refresh_token`,
 			{},
