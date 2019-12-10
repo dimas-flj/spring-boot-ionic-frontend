@@ -28,21 +28,7 @@ export class ProdutosPage {
 				.subscribe(
 					response => {
 						this.itens = response['content'];
-						for (var i = 0; i < this.itens.length; i++) {
-							let item = this.itens[i];
-							let url = `${API_CONFIG.bucketBaseUrl}/imgs/prod${item.id}-small.jpg`;
-							this.produtoService.getSmallImageFromBucket(url)
-								.subscribe(
-									response => {
-										console.log("Encontrou imagem no bucket para o produto id = " + item.id);
-										item.imageUrl = url;
-									},
-									error => {
-										console.log("Não encontrou imagem no bucket para o produto id = " + item.id);
-										item.imageUrl = "assets/imgs/prod.jpg";
-									}
-								);
-						}
+						this.loadImagesFromBucket();
 					},
 					error => { }
 				)
@@ -52,6 +38,27 @@ export class ProdutosPage {
 		}
 		//this.loadData();
 	}
+
+	loadImagesFromBucket() {
+		for (var i = 0; i < this.itens.length; i++) {
+			let item = this.itens[i];
+			let url = `${API_CONFIG.bucketBaseUrl}/imgs/prod${item.id}-small.jpg`;
+			this.produtoService.getSmallImageFromBucket(url)
+				.subscribe(
+					response => {
+						item.imageUrl = url;
+					},
+					error => {
+						item.imageUrl = "assets/imgs/prod.jpg";
+					}
+				);
+		}
+	}
+
+	showDetail() {
+		this.navCtrl.push('ProdutoDetailPage');
+	}
+
 	/*
 		loadData() {
 			let categoria_id = this.navParams.get('categoria_id');
