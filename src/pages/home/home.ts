@@ -22,17 +22,17 @@ export class HomePage {
 		public menu: MenuController,
 		public auth: AuthService
 	) { };
-	/*
-		ionViewDidEnter() {
-			this.auth.refreshToken()
-				.subscribe(
-					response => {
-						this.auth.successfulLogin(response.headers.get('Authorization'));
-						this.navCtrl.setRoot('CategoriasPage');
-					},
-					error => { }
-				);
-		};*/
+
+	ionViewDidEnter() {
+		this.auth.refreshToken()
+			.subscribe(
+				response => {
+					this.auth.successfulLogin(response.headers.get('Authorization'));
+					this.navCtrl.setRoot('CategoriasPage');
+				},
+				error => { }
+			);
+	};
 
 	ionViewDidLeave() {
 		this.menu.swipeEnable(true);
@@ -47,5 +47,9 @@ export class HomePage {
 				},
 				error => { }
 			);
+	};
+
+	signup() {
+		this.navCtrl.push('SignupPage');
 	};
 }
