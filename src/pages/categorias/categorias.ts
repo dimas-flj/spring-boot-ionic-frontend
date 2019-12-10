@@ -30,23 +30,26 @@ export class CategoriasPage {
 			.subscribe(
 				response => {
 					this.itens = response;
-					for (var i = 0; i < this.itens.length; i++) {
-						let item = this.itens[i];
-						let url = `${API_CONFIG.bucketBaseUrl}/imgs/cat${item.id}.jpg`;
-						this.categoriaService.getImageFromBucket(url)
-							.subscribe(
-								response => {
-									item.imageUrl = url;
-									console.log("Carregou imagem de categoria : " + item.imageUrl);
-								},
-								error => {
-									item.imageUrl = "assets/imgs/cat.jpg";
-								}
-							);
-					}
+					this.loadImagesFromBucket();
 				},
 				error => { }
 			);
+	}
+
+	loadImagesFromBucket() {
+		for (var i = 0; i < this.itens.length; i++) {
+			let item = this.itens[i];
+			let url = `${API_CONFIG.bucketBaseUrl}/imgs/cat${item.id}.jpg`;
+			this.categoriaService.getImageFromBucket(url)
+				.subscribe(
+					response => {
+						item.imageUrl = url;
+					},
+					error => {
+						item.imageUrl = "assets/imgs/cat.jpg";
+					}
+				);
+		}
 	}
 
 	showProdutos(categoria_id: string) {
