@@ -21,46 +21,62 @@ export class ProdutosPage {
 	) { }
 
 	ionViewDidLoad() {
-		this.itens = [
-			{
-				id: "1",
-				nome: "Mouse",
-				preco: 80.99,
-				imageUrl: `${API_CONFIG.bucketBaseUrl}/imgs/prod1-small.jpg`
-			},
-			{
-				id: "2",
-				nome: "Teclado",
-				preco: 100.00,
-				imageUrl: `${API_CONFIG.bucketBaseUrl}/imgs/prod2-small.jpg`
-			}
-		];
+		let categoria_id = this.navParams.get('categoria_id');
+		console.log("ID da categoria recebido = " + categoria_id);
+		if (categoria_id && categoria_id != 'undefined') {
+			this.produtoService.findByCategoria(categoria_id)
+				.subscribe(
+					response => {
+						this.itens = response['content'];
+						for (var i = 0; i < this.itens.length; i++) {
+							let item = this.itens[i];
+							let url = `${API_CONFIG.bucketBaseUrl}/imgs/prod${item.id}-small.jpg`;
+							this.produtoService.getSmallImageFromBucket(url)
+								.subscribe(
+									response => {
+										console.log("Encontrou imagem no bucket para o produto id = " + item.id);
+										item.imageUrl = url;
+									},
+									error => {
+										console.log("Não encontrou imagem no bucket para o produto id = " + item.id);
+										item.imageUrl = "assets/imgs/prod.jpg";
+									}
+								);
+						}
+					},
+					error => { }
+				)
+		}
+		else {
+			this.navCtrl.setRoot('CategoriasPage');
+		}
 		//this.loadData();
 	}
-
-	loadData() {
-		let categoria_id = this.navParams.get('categoria_id');
-		let loader = this.presentLoading();
-		this.produtoService.findByCategoria(
-			categoria_id,
-			this.page,
-			10
-		)
-			.subscribe(
-				response => {
-					let start = this.itens.length;
-					this.itens = this.itens.concat(response['content']);
-					let end = this.itens.length - 1;
-					loader.dismiss();
-					console.log(this.page);
-					console.log(this.itens);
-					this.loadImageUrls(start, end);
-				},
-				error => {
-					loader.dismiss();
-				}
-			);
-	}
+	/*
+		loadData() {
+			let categoria_id = this.navParams.get('categoria_id');
+			let loader = this.presentLoading();
+			this.produtoService.findByCategoria(
+				categoria_id,
+				this.page,
+				10
+			)
+				.subscribe(
+					response => {
+						let start = this.itens.length;
+						this.itens = this.itens.concat(response['content']);
+						let end = this.itens.length - 1;
+						loader.dismiss();
+						console.log(this.page);
+						console.log(this.itens);
+						this.loadImageUrls(start, end);
+					},
+					error => {
+						loader.dismiss();
+					}
+				);
+		}
+		*/
 
 	loadImageUrls(start: number, end: number) {
 		for (var i = start; i <= end; i++) {
@@ -68,7 +84,7 @@ export class ProdutosPage {
 			this.produtoService.getSmallImageFromBucket(item.id)
 				.subscribe(
 					response => {
-						item.imageUrl = `${API_CONFIG.bucketBaseUrl}/prod${item.id}-small.jpg`;
+						item.imageUrl = `${API_CONFIG.bucketBaseUrl}/imgs/prod${item.id}-small.jpg`;
 					},
 					error => {
 						item.imageUrl = "assets/imgs/prod.jpg";

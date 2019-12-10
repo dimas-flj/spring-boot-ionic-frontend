@@ -14,7 +14,7 @@ export class CategoriasPage {
 	categoria: CategoriaDTO = {
 		id: "",
 		nome: "",
-		bucketUrl: ""
+		imageUrl: ""
 	};
 
 	itens: CategoriaDTO[];
@@ -29,20 +29,27 @@ export class CategoriasPage {
 		this.categoriaService.findAll()
 			.subscribe(
 				response => {
-					this.categoria.bucketUrl = API_CONFIG.bucketBaseUrl;
 					this.itens = response;
+					for (var i = 0; i < this.itens.length; i++) {
+						let item = this.itens[i];
+						let url = `${API_CONFIG.bucketBaseUrl}/imgs/cat${item.id}.jpg`;
+						this.categoriaService.getImageFromBucket(url)
+							.subscribe(
+								response => {
+									item.imageUrl = url;
+									console.log("Carregou imagem de categoria : " + item.imageUrl);
+								},
+								error => {
+									item.imageUrl = "assets/imgs/cat.jpg";
+								}
+							);
+					}
 				},
 				error => { }
 			);
 	}
 
-	showProdutos() {
-		this.navCtrl.push('ProdutosPage');
-	}
-
-	/*
 	showProdutos(categoria_id: string) {
 		this.navCtrl.push('ProdutosPage', { categoria_id: categoria_id });
 	}
-	*/
 }

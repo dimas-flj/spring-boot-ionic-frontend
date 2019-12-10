@@ -34,9 +34,6 @@ export class ProfilePage {
 
 					// buscar imagem no bucket
 					this.getImageIfExists();
-					if (!this.cliente.imageUrl) {
-						this.cliente.imageUrl = "assets/imgs/avatar-blank.png";
-					}
 				},
 				error => {
 					switch (error.status) {
@@ -57,12 +54,14 @@ export class ProfilePage {
 
 	getImageIfExists() {
 		let img_url = `${API_CONFIG.bucketBaseUrl}/imgs/cp${this.cliente.id}.jpg`;
-		this.clienteService.getImageFromBucket(this.cliente.id)
+		this.clienteService.getImageFromBucket(img_url)
 			.subscribe(
 				response => {
 					this.cliente.imageUrl = img_url;
 				},
-				error => { }
+				error => {
+					this.cliente.imageUrl = "assets/imgs/avatar-blank.png";
+				}
 			);
 	}
 }

@@ -14,8 +14,7 @@ export class ClienteService {
 		);
 	}
 
-	getImageFromBucket(id: string): Observable<any> {
-		let url = `${API_CONFIG.bucketBaseUrl}/imgs/cp${id}.jpg`
+	getImageFromBucket(url: string): Observable<any> {
 		return this.http.get(url, { responseType: 'blob' });
 	}
 
