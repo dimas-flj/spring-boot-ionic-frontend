@@ -26,12 +26,23 @@ export class CategoriasPage {
 	) { }
 
 	ionViewDidLoad() {
-		this.categoriaService.findAll().subscribe(
-			response => {
-				this.categoria.bucketUrl = API_CONFIG.bucketBaseUrl;
-				this.itens = response;
-			},
-			error => { }
-		);
+		this.categoriaService.findAll()
+			.subscribe(
+				response => {
+					this.categoria.bucketUrl = API_CONFIG.bucketBaseUrl;
+					this.itens = response;
+				},
+				error => { }
+			);
 	}
+
+	showProdutos() {
+		this.navCtrl.push('ProdutosPage');
+	}
+
+	/*
+	showProdutos(categoria_id: string) {
+		this.navCtrl.push('ProdutosPage', { categoria_id: categoria_id });
+	}
+	*/
 }
