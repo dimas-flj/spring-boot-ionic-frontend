@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { CategoriaService } from '../../services/domain/categoria.service';
 import { CategoriaDTO } from '../../models/categoria.dto';
 import { API_CONFIG } from "../../config/api.config";
+import { AWSService } from '../../services/aws.service';
+import { CategoriaService } from '../../services/domain/categoria.service';
 
 @IonicPage()
 @Component({
@@ -22,7 +23,8 @@ export class CategoriasPage {
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,
-		public categoriaService: CategoriaService
+		public categoriaService: CategoriaService,
+		public awsService: AWSService
 	) { }
 
 	ionViewDidLoad() {
@@ -40,7 +42,7 @@ export class CategoriasPage {
 		for (var i = 0; i < this.itens.length; i++) {
 			let item = this.itens[i];
 			let url = `${API_CONFIG.bucketBaseUrl}/imgs/cat${item.id}.jpg`;
-			this.categoriaService.getImageFromBucket(url)
+			this.awsService.getImageFromBucket(url)
 				.subscribe(
 					response => {
 						item.imageUrl = url;

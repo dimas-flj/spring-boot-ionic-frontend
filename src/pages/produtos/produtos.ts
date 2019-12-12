@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { ProdutoDTO } from '../../models/produto.dto';
 import { API_CONFIG } from '../../config/api.config';
 import { ProdutoService } from '../../services/domain/produto.service';
+import { AWSService } from '../../services/aws.service';
 
 @IonicPage()
 @Component({
@@ -17,7 +18,8 @@ export class ProdutosPage {
 		public navCtrl: NavController,
 		public navParams: NavParams,
 		public produtoService: ProdutoService,
-		public loadingCtrl: LoadingController
+		public loadingCtrl: LoadingController,
+		public awsService: AWSService
 	) { }
 
 	ionViewDidLoad() {
@@ -41,7 +43,7 @@ export class ProdutosPage {
 		for (var i = 0; i < this.itens.length; i++) {
 			let item = this.itens[i];
 			let url = `${API_CONFIG.bucketBaseUrl}/imgs/prod${item.id}-small.jpg`;
-			this.produtoService.getImageFromBucket(url)
+			this.awsService.getImageFromBucket(url)
 				.subscribe(
 					response => {
 						item.imageUrl = url;

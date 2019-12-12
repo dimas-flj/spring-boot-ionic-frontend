@@ -4,6 +4,7 @@ import { StorageService } from '../../services/storage.service';
 import { ClienteDTO } from '../../models/cliente.dto';
 import { ClienteService } from '../../services/domain/cliente.service';
 import { API_CONFIG } from '../../config/api.config';
+import { AWSService } from '../../services/aws.service';
 
 @IonicPage()
 @Component(
@@ -20,7 +21,8 @@ export class ProfilePage {
 		public navCtrl: NavController,
 		public navParams: NavParams,
 		public storage: StorageService,
-		public clienteService: ClienteService
+		public clienteService: ClienteService,
+		public awsService: AWSService
 	) { };
 
 	ionViewDidLoad() {
@@ -54,7 +56,7 @@ export class ProfilePage {
 
 	getImageIfExists() {
 		let img_url = `${API_CONFIG.bucketBaseUrl}/imgs/cp${this.cliente.id}.jpg`;
-		this.clienteService.getImageFromBucket(img_url)
+		this.awsService.getImageFromBucket(img_url)
 			.subscribe(
 				response => {
 					this.cliente.imageUrl = img_url;

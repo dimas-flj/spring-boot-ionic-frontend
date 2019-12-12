@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http'
 
-import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule, LOCALE_ID } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
@@ -15,6 +15,12 @@ import { StorageService } from '../services/storage.service';
 import { ClienteService } from '../services/domain/cliente.service';
 import { AuthInterceptorProvider } from '../interceptors/auth-interceptor';
 import { ProdutoService } from '../services/domain/produto.service';
+import { CartService } from '../services/domain/cart.service';
+import { AWSService } from '../services/aws.service';
+import { registerLocaleData } from '@angular/common';
+import ptPt from '@angular/common/locales/pt';
+
+registerLocaleData(ptPt, 'pt-BR');
 
 @NgModule({
 	declarations: [
@@ -32,6 +38,7 @@ import { ProdutoService } from '../services/domain/produto.service';
 	providers: [
 		StatusBar,
 		SplashScreen,
+		{ provide: LOCALE_ID, useValue: 'pt-BR' },
 		{ provide: ErrorHandler, useClass: IonicErrorHandler },
 		AuthInterceptorProvider,
 		ErrorInterceptorProvider,
@@ -39,7 +46,9 @@ import { ProdutoService } from '../services/domain/produto.service';
 		CategoriaService,
 		StorageService,
 		ClienteService,
-		ProdutoService
+		ProdutoService,
+		CartService,
+		AWSService
 	]
 })
-export class AppModule { }
+export class AppModule { };
