@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ClienteDTO } from "../../models/cliente.dto";
-import { Observable } from "rxjs/Rx";
 import { API_CONFIG } from "../../config/api.config";
 
 @Injectable()
 export class ClienteService {
 	constructor(public http: HttpClient) { }
 
-	findByEmail(email: string): Observable<ClienteDTO> {
-		return this.http.get<ClienteDTO>(
+	findByEmail(email: string) {
+		return this.http.get(
 			`${API_CONFIG.baseUrl}/clientes/email?value=${email}`
 		);
 	}

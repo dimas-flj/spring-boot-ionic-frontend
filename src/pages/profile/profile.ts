@@ -32,7 +32,7 @@ export class ProfilePage {
 			email = localUser.email;
 			this.clienteService.findByEmail(email).subscribe(
 				response => {
-					this.cliente = response;
+					this.cliente = response as ClienteDTO;
 
 					// buscar imagem no bucket
 					this.getImageIfExists();
