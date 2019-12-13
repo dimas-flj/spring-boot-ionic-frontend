@@ -36,6 +36,10 @@ export class MyApp {
 				component: 'CategoriasPage'
 			},
 			{
+				title: 'Carrinho',
+				component: 'CartPage'
+			},
+			{
 				title: 'Sair',
 				component: ''
 			}
