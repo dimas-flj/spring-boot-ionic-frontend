@@ -67,6 +67,6 @@ export class PickAddressPage {
 
 	nextPage(endereco: EnderecoDTO) {
 		this.pedido.enderecoDeEntrega = { id: endereco.id };
-		console.log("PEDIDOS: enderecoDeEntrega.id = " + this.pedido.enderecoDeEntrega.id);
+		this.navCtrl.push('PaymentPage', { pedido: this.pedido });
 	}
 }
