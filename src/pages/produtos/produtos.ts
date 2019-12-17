@@ -11,7 +11,7 @@ import { AWSService } from '../../services/aws.service';
 	templateUrl: 'produtos.html',
 })
 export class ProdutosPage {
-	itens: ProdutoDTO[];
+	itens: ProdutoDTO[] = [];
 	page: number = 0;
 
 	constructor(
@@ -27,8 +27,8 @@ export class ProdutosPage {
 		this.loadData();
 	}
 
-	loadSmallImagesFromBucket() {
-		for (var i = 0; i < this.itens.length; i++) {
+	loadSmallImagesFromBucket(start: number, end: number) {
+		for (var i = start; i <= end; i++) {
 			let item = this.itens[i];
 			let url = `${API_CONFIG.bucketBaseUrl}/imgs/prod${item.id}-small.jpg`;
 			this.awsService.getImageFromBucket(url)
@@ -61,11 +61,13 @@ export class ProdutosPage {
 		let categoria_id = this.navParams.get('categoria_id');
 		let loader = this.presentLoading();
 		if (categoria_id && categoria_id != 'undefined') {
-			this.produtoService.findByCategoria(categoria_id)
+			this.produtoService.findByCategoria(categoria_id, this.page, 10)
 				.subscribe(
 					response => {
-						this.itens = response['content'];
-						this.loadSmallImagesFromBucket();
+						let start = this.itens.length;
+						this.itens = this.itens.concat(response['content']);
+						let end = this.itens.length - 1;
+						this.loadSmallImagesFromBucket(start, end);
 						loader.dismiss();
 					},
 					error => {
@@ -79,10 +81,24 @@ export class ProdutosPage {
 	}
 
 	doRefresh(refresher: any) {
+		this.page = 0;
+		this.itens = [];
+
 		this.loadData();
 		setTimeout(
 			() => {
 				refresher.complete();
+			},
+			1000
+		);
+	}
+
+	doInfinite(infiniteScroll: any) {
+		this.page++;
+		this.loadData();
+		setTimeout(
+			() => {
+				infiniteScroll.complete();
 			},
 			1000
 		);
