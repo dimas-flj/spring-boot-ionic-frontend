@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { ProdutoDTO } from '../../models/produto.dto';
 import { API_CONFIG } from '../../config/api.config';
 import { ProdutoService } from '../../services/domain/produto.service';
@@ -19,19 +19,24 @@ export class ProdutosPage {
 		public navParams: NavParams,
 		public produtoService: ProdutoService,
 		public loadingCtrl: LoadingController,
-		public awsService: AWSService
+		public awsService: AWSService,
+		public loadCtrl: LoadingController
 	) { }
 
 	ionViewDidLoad() {
 		let categoria_id = this.navParams.get('categoria_id');
+		let loader = this.presentLoading();
 		if (categoria_id && categoria_id != 'undefined') {
 			this.produtoService.findByCategoria(categoria_id)
 				.subscribe(
 					response => {
 						this.itens = response['content'];
 						this.loadSmallImagesFromBucket();
+						loader.dismiss();
 					},
-					error => { }
+					error => {
+						loader.dismiss();
+					}
 				)
 		}
 		else {
@@ -57,5 +62,15 @@ export class ProdutosPage {
 
 	showDetail(produto_id: string) {
 		this.navCtrl.push('ProdutoDetailPage', { produto_id: produto_id });
+	}
+
+	presentLoading(): Loading {
+		let loader = this.loadingCtrl.create(
+			{
+				content: "Aguarde..."
+			}
+		);
+		loader.present();
+		return loader;
 	}
 }
