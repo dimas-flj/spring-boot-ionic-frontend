@@ -4,4 +4,4 @@ export const API_CONFIG = {
     HTTP_STATUS_401: 401,
     HTTP_STATUS_403: 403,
     HTTP_STATUS_422: 422
-}
+};

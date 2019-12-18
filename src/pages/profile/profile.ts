@@ -5,6 +5,7 @@ import { ClienteDTO } from '../../models/cliente.dto';
 import { ClienteService } from '../../services/domain/cliente.service';
 import { API_CONFIG } from '../../config/api.config';
 import { AWSService } from '../../services/aws.service';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @IonicPage()
 @Component(
@@ -16,13 +17,16 @@ import { AWSService } from '../../services/aws.service';
 
 export class ProfilePage {
 	cliente: ClienteDTO;
+	picture: string;
+	cameraOn: boolean = false;
 
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,
 		public storage: StorageService,
 		public clienteService: ClienteService,
-		public awsService: AWSService
+		public awsService: AWSService,
+		private camera: Camera
 	) { };
 
 	ionViewDidLoad() {
@@ -64,6 +68,31 @@ export class ProfilePage {
 				error => {
 					this.cliente.imageUrl = "assets/imgs/avatar-blank.png";
 				}
+			);
+	}
+
+	testeCamera() {
+		console.log('VAI ACIONAR CAMERA.');
+	}
+
+	getCameraPicture() {
+		this.cameraOn = true;
+		let options: CameraOptions = {
+			quality: 100,
+			destinationType: this.camera.DestinationType.FILE_URI,
+			encodingType: this.camera.EncodingType.PNG,
+			mediaType: this.camera.MediaType.PICTURE
+		}
+
+		console.log('VAI ACIONAR CAMERA.');
+
+		this.camera.getPicture(options).
+			then(
+				(imageData) => {
+					this.picture = 'data:image/png;base64,' + imageData;
+					this.cameraOn = false;
+				},
+				(err) => { }
 			);
 	}
 }
