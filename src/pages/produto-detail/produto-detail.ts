@@ -40,7 +40,7 @@ export class ProdutoDetailPage {
 	}
 
 	getImageFromBucket(produto_id: string) {
-		let url = `${API_CONFIG.bucketBaseUrl}/imgs/prod${produto_id}.jpg`;
+		let url = `${API_CONFIG.bucketBaseUrl}/prod${produto_id}.jpg`;
 		this.awsService.getImageFromBucket(url)
 			.subscribe(
 				response => {

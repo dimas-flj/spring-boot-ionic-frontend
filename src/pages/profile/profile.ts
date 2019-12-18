@@ -30,6 +30,10 @@ export class ProfilePage {
 	) { };
 
 	ionViewDidLoad() {
+		this.loadData();
+	}
+
+	loadData() {
 		let localUser = this.storage.getLocalUser();
 		let email: string;
 		if (localUser && localUser.email) {
@@ -59,7 +63,7 @@ export class ProfilePage {
 	}
 
 	getImageIfExists() {
-		let img_url = `${API_CONFIG.bucketBaseUrl}/imgs/cp${this.cliente.id}.jpg`;
+		let img_url = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`;
 		this.awsService.getImageFromBucket(img_url)
 			.subscribe(
 				response => {
@@ -71,10 +75,6 @@ export class ProfilePage {
 			);
 	}
 
-	testeCamera() {
-		console.log('VAI ACIONAR CAMERA.');
-	}
-
 	getCameraPicture() {
 		this.cameraOn = true;
 		let options: CameraOptions = {
@@ -84,8 +84,6 @@ export class ProfilePage {
 			mediaType: this.camera.MediaType.PICTURE
 		}
 
-		console.log('VAI ACIONAR CAMERA.');
-
 		this.camera.getPicture(options).
 			then(
 				(imageData) => {
@@ -94,5 +92,23 @@ export class ProfilePage {
 				},
 				(err) => { }
 			);
+
+	}
+
+	sendPicture() {
+		this.clienteService.uploadPicture(this.picture).
+			subscribe(
+				response => {
+					this.picture = null;
+					this.loadData();
+				},
+				error => {
+
+				}
+			)
+	}
+
+	cancelPicture() {
+		this.picture = null;
 	}
 }

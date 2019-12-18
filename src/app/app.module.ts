@@ -19,6 +19,7 @@ import { CartService } from '../services/domain/cart.service';
 import { AWSService } from '../services/aws.service';
 import { registerLocaleData } from '@angular/common';
 import ptPt from '@angular/common/locales/pt';
+import { ImageUtilService } from '../services/image-util.service';
 
 registerLocaleData(ptPt, 'pt-BR');
 
@@ -48,7 +49,8 @@ registerLocaleData(ptPt, 'pt-BR');
 		ClienteService,
 		ProdutoService,
 		CartService,
-		AWSService
+		AWSService,
+		ImageUtilService
 	]
 })
 export class AppModule { };

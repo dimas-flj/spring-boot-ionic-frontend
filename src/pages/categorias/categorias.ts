@@ -41,7 +41,7 @@ export class CategoriasPage {
 	loadImagesFromBucket() {
 		for (var i = 0; i < this.itens.length; i++) {
 			let item = this.itens[i];
-			let url = `${API_CONFIG.bucketBaseUrl}/imgs/cat${item.id}.jpg`;
+			let url = `${API_CONFIG.bucketBaseUrl}/cat${item.id}.jpg`;
 			this.awsService.getImageFromBucket(url)
 				.subscribe(
 					response => {

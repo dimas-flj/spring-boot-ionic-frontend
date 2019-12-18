@@ -30,7 +30,7 @@ export class ProdutosPage {
 	loadSmallImagesFromBucket(start: number, end: number) {
 		for (var i = start; i <= end; i++) {
 			let item = this.itens[i];
-			let url = `${API_CONFIG.bucketBaseUrl}/imgs/prod${item.id}-small.jpg`;
+			let url = `${API_CONFIG.bucketBaseUrl}/prod${item.id}-small.jpg`;
 			this.awsService.getImageFromBucket(url)
 				.subscribe(
 					response => {
