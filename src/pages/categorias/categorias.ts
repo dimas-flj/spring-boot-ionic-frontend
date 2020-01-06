@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { CategoriaDTO } from '../../models/categoria.dto';
 import { API_CONFIG } from "../../config/api.config";
 import { AWSService } from '../../services/aws.service';
@@ -24,18 +24,37 @@ export class CategoriasPage {
 		public navCtrl: NavController,
 		public navParams: NavParams,
 		public categoriaService: CategoriaService,
-		public awsService: AWSService
+		public awsService: AWSService,
+		public loadingCtrl: LoadingController
 	) { }
 
 	ionViewDidLoad() {
+		this.loadData();
+	}
+
+	loadData() {
+		let loader = this.presentLoading();
 		this.categoriaService.findAll()
 			.subscribe(
 				response => {
 					this.itens = response;
 					this.loadImagesFromBucket();
+					loader.dismiss();
 				},
-				error => { }
+				error => {
+					loader.dismiss();
+				}
 			);
+	}
+
+	presentLoading(): Loading {
+		let loader = this.loadingCtrl.create(
+			{
+				content: "Aguarde..."
+			}
+		);
+		loader.present();
+		return loader;
 	}
 
 	loadImagesFromBucket() {

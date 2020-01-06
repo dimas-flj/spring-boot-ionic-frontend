@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { StorageService } from '../../services/storage.service';
 import { ClienteDTO } from '../../models/cliente.dto';
 import { ClienteService } from '../../services/domain/cliente.service';
@@ -26,14 +26,26 @@ export class ProfilePage {
 		public storage: StorageService,
 		public clienteService: ClienteService,
 		public awsService: AWSService,
-		private camera: Camera
+		private camera: Camera,
+		public loadingCtrl: LoadingController
 	) { };
 
 	ionViewDidLoad() {
 		this.loadData();
 	}
 
+	presentLoading(): Loading {
+		let loader = this.loadingCtrl.create(
+			{
+				content: "Aguarde..."
+			}
+		);
+		loader.present();
+		return loader;
+	}
+
 	loadData() {
+		let loader = this.presentLoading();
 		let localUser = this.storage.getLocalUser();
 		let email: string;
 		if (localUser && localUser.email) {
@@ -44,6 +56,7 @@ export class ProfilePage {
 
 					// buscar imagem no bucket
 					this.getImageIfExists();
+					loader.dismiss();
 				},
 				error => {
 					switch (error.status) {
@@ -53,6 +66,7 @@ export class ProfilePage {
 						}
 						default: { break; }
 					}
+					loader.dismiss();
 				}
 			);
 		}

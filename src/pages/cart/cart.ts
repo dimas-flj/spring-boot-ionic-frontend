@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { CartItem } from '../../models/cart-item';
 import { API_CONFIG } from '../../config/api.config';
 import { AWSService } from '../../services/aws.service';
@@ -18,13 +18,30 @@ export class CartPage {
 		public navCtrl: NavController,
 		public navParams: NavParams,
 		public cartService: CartService,
-		public awsService: AWSService
+		public awsService: AWSService,
+		public loadingCtrl: LoadingController
 	) { }
 
 	ionViewDidLoad() {
+		this.loadData();
+	}
+
+	presentLoading(): Loading {
+		let loader = this.loadingCtrl.create(
+			{
+				content: "Aguarde..."
+			}
+		);
+		loader.present();
+		return loader;
+	}
+
+	loadData() {
+		let loader = this.presentLoading();
 		let cart = this.cartService.getCart();
 		this.itens = cart.itens;
 		this.loadSmallImagesFromBucket();
+		loader.dismiss();
 	}
 
 	loadSmallImagesFromBucket() {

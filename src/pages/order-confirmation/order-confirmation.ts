@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { PedidoDTO } from '../../models/pedido.dto';
 import { CartItem } from '../../models/cart-item';
 import { CartService } from '../../services/domain/cart.service';
@@ -29,12 +29,28 @@ export class OrderConfirmationPage {
 		public navParams: NavParams,
 		public cartService: CartService,
 		public clienteService: ClienteService,
-		public pedidoService: PedidoService
+		public pedidoService: PedidoService,
+		public loadingCtrl: LoadingController
 	) {
 		this.pedido = this.navParams.get('pedido');
 	}
 
 	ionViewDidLoad() {
+		this.loadData();
+	}
+
+	presentLoading(msg: string): Loading {
+		let loader = this.loadingCtrl.create(
+			{
+				content: `${msg}...`
+			}
+		);
+		loader.present();
+		return loader;
+	}
+
+	loadData() {
+		let loader = this.presentLoading("Aguarde");
 		this.cartItens = this.cartService.getCart().itens;
 		this.clienteService.findById(this.pedido.cliente.id).
 			subscribe(
@@ -44,8 +60,10 @@ export class OrderConfirmationPage {
 						this.pedido.enderecoDeEntrega.id,
 						response['enderecos']
 					);
+					loader.dismiss();
 				},
 				error => {
+					loader.dismiss();
 					this.navCtrl.setRoot('HomePage');
 				}
 			)
@@ -69,17 +87,18 @@ export class OrderConfirmationPage {
 	}
 
 	checkout() {
+		let loader = this.presentLoading("Registrando seu pedido");
 		this.pedidoService.insert(this.pedido).
 			subscribe(
 				response => {
 					this.cartService.createOrClearCart();
 
 					let location = response.headers.get('location');
-					console.log("location = " + location);
 					this.codpedido = this.extractId(location);
-					console.log("codPedido = " + this.codpedido);
+					loader.dismiss();
 				},
 				error => {
+					loader.dismiss();
 					if (error.status == API_CONFIG.HTTP_STATUS_403) {
 						this.navCtrl.setRoot('HomePage');
 					}

@@ -19,8 +19,7 @@ export class ProdutosPage {
 		public navParams: NavParams,
 		public produtoService: ProdutoService,
 		public loadingCtrl: LoadingController,
-		public awsService: AWSService,
-		public loadCtrl: LoadingController
+		public awsService: AWSService
 	) { }
 
 	ionViewDidLoad() {
